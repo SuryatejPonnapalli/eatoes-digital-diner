@@ -45,4 +45,6 @@ model Order {
   items String[]
   totalPrice Int
   status Status @default(processing)
+
+  @@map("orders")
 }
