@@ -4,7 +4,7 @@ type RequestHandlerType = (
   req: Request,
   res: Response,
   next: NextFunction
-) => Promise<Response<any, Record<string, any>>>;
+) => Promise<any>;
 
 const asyncHandler = (requestHandler: RequestHandlerType) => {
   return (req: Request, res: Response, next: NextFunction) => {
