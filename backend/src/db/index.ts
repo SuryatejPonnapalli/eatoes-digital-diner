@@ -9,7 +9,7 @@ export const prisma = new PrismaClient({
 const connectDB = async () => {
   try {
     const mongoConnectionInstance = await mongoose.connect(
-      `${process.env.MONGOOSE_URI}/eatoes-menu`
+      `${process.env.MONGOOSE_URI}`
     );
     console.log("Connection successful");
 

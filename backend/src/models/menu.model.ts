@@ -6,6 +6,7 @@ export interface IMenu extends Document {
   category: string;
   image: string;
   desc: string;
+  available: boolean;
 }
 
 const menuSchema: Schema<IMenu> = new Schema(
@@ -30,6 +31,10 @@ const menuSchema: Schema<IMenu> = new Schema(
     desc: {
       type: String,
       required: true,
+    },
+    available: {
+      type: Boolean,
+      default: true,
     },
   },
   { timestamps: true }
