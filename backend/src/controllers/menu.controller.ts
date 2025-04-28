@@ -3,15 +3,20 @@ import { ApiError } from "../utils/apiError";
 import { ApiResponse } from "../utils/apiResponse";
 import { asyncHandler } from "../utils/asyncHandler";
 import { Request, Response } from "express";
-import mongoose from "mongoose";
+import { uploadOnCloudinary } from "../utils/cloudinary";
 
 const createMenuItem = asyncHandler(async (req: Request, res: Response) => {
   const user = req.user;
+  const foodImagePath = req.file?.path;
   const { itemName, cost, category, desc } = req.body;
 
   try {
-    if (user.role !== "ADMIN") {
-      throw new ApiError(403, "Unauthorized");
+    // if (user.role !== "ADMIN") {
+    //   throw new ApiError(403, "Unauthorized");
+    // }
+
+    if (!foodImagePath || !itemName || !cost || !category || !desc) {
+      throw new ApiError(400, "All fields not provided.");
     }
 
     const oldMenuItem = await Menu.findOne({ itemName: itemName });
@@ -20,10 +25,13 @@ const createMenuItem = asyncHandler(async (req: Request, res: Response) => {
       throw new ApiError(400, "Menu item already exists.");
     }
 
+    const foodImage = await uploadOnCloudinary(foodImagePath);
+
     const menuItem = await Menu.create({
       itemName: itemName,
       cost: cost,
       category: category,
+      image: foodImage?.url,
       desc: desc,
     });
 
@@ -37,6 +45,7 @@ const createMenuItem = asyncHandler(async (req: Request, res: Response) => {
         new ApiResponse(200, { menuItem }, "Menu item created successfully.")
       );
   } catch (error: any) {
+    console.log(error);
     throw new ApiError(error.statusCode, error.data);
   }
 });
@@ -81,9 +90,9 @@ const editMenuItem = asyncHandler(async (req: Request, res: Response) => {
   const { itemName, cost, category, desc, available, menuId } = req.body;
 
   try {
-    // if (user.role !== "ADMIN") {
-    //   throw new ApiError(403, "Unauthorized.");
-    // }
+    if (user.role !== "ADMIN") {
+      throw new ApiError(403, "Unauthorized.");
+    }
 
     const updateData: any = {};
 

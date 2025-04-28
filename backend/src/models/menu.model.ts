@@ -26,7 +26,7 @@ const menuSchema: Schema<IMenu> = new Schema(
     },
     image: {
       type: String,
-      required: false,
+      required: true,
     },
     desc: {
       type: String,
