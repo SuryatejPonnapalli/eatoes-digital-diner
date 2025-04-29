@@ -77,8 +77,8 @@ const loginUser = asyncHandler(
       maxAge: number;
     } = {
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === "prod",
+      sameSite: process.env.NODE_ENV === "prod" ? "none" : "lax",
       maxAge: 1 * 24 * 60 * 60 * 1000,
     };
 
