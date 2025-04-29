@@ -90,9 +90,9 @@ const editMenuItem = asyncHandler(async (req: Request, res: Response) => {
   const { itemName, cost, category, desc, available, menuId } = req.body;
 
   try {
-    if (user.role !== "ADMIN") {
-      throw new ApiError(403, "Unauthorized.");
-    }
+    // if (user.role !== "ADMIN") {
+    //   throw new ApiError(403, "Unauthorized.");
+    // }
 
     const updateData: any = {};
 
@@ -116,6 +116,7 @@ const editMenuItem = asyncHandler(async (req: Request, res: Response) => {
         new ApiResponse(200, { updatedMenu }, "Updated menu successfully.")
       );
   } catch (error: any) {
+    console.log(error);
     throw new ApiError(error.statusCode, error.data);
   }
 });

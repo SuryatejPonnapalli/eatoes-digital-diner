@@ -1,6 +1,11 @@
 import { z } from "zod";
 
 export const OrderSchema = z.object({
-  items: z.string().array().nonempty({ message: "Cant be empty" }),
+  items: z.array(
+    z.object({
+      itemName: z.string(),
+      quantity: z.number(),
+    })
+  ),
   totalPrice: z.number(),
 });
