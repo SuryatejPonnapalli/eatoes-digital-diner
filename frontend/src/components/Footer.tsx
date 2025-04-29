@@ -8,8 +8,8 @@ export default function Footer() {
         to="/"
         className={({ isActive }) =>
           isActive
-            ? "flex flex-col items-center text-white"
-            : "flex flex-col items-center"
+            ? "flex flex-col items-center text-white bg-[#26A69A] px-3 py-2 rounded-xl transition"
+            : "flex flex-col items-center text-gray-800 px-3 py-2"
         }
       >
         <Home />
@@ -19,8 +19,8 @@ export default function Footer() {
         to="/menu"
         className={({ isActive }) =>
           isActive
-            ? "flex flex-col items-center text-white"
-            : "flex flex-col items-center"
+            ? "flex flex-col items-center text-white bg-[#26A69A] px-3 py-2 rounded-xl transition"
+            : "flex flex-col items-center text-gray-800 px-3 py-2"
         }
       >
         <BookOpen />
@@ -30,8 +30,8 @@ export default function Footer() {
         to="/history"
         className={({ isActive }) =>
           isActive
-            ? "flex flex-col items-center text-white"
-            : "flex flex-col items-center"
+            ? "flex flex-col items-center text-white bg-[#26A69A] px-3 py-2 rounded-xl transition"
+            : "flex flex-col items-center text-gray-800 px-3 py-2"
         }
       >
         <History />

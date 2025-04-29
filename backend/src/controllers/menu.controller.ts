@@ -51,13 +51,24 @@ const createMenuItem = asyncHandler(async (req: Request, res: Response) => {
 });
 
 const getMenuItems = asyncHandler(async (req: Request, res: Response) => {
+  const token = req.headers.authorization || req.cookies?.accessToken;
+  let tokenState;
+  if (token) {
+    tokenState = true;
+  } else {
+    tokenState = false;
+  }
   try {
     const menuItems = await Menu.find({ available: true });
 
     return res
       .status(200)
       .json(
-        new ApiResponse(200, { menuItems }, "Menu items fetched successfully.")
+        new ApiResponse(
+          200,
+          { menuItems: menuItems, loggedIn: tokenState },
+          "Menu items fetched successfully."
+        )
       );
   } catch (error: any) {
     throw new ApiError(error.statusCode, error.data);

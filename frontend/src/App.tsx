@@ -10,9 +10,7 @@ import { Link } from "react-router";
 
 function App() {
   const [menuData, setMenuData] = useState<MenuData[]>([]);
-  const isCookiePresent = document.cookie
-    .split(";")
-    .some((cookie) => cookie.trim().startsWith("accessToken="));
+  const [loggedInState, setLoggedInState] = useState(false);
 
   const context = useContext(CartContext);
   if (!context) throw new Error("Must be used within CartContextProvider");
@@ -28,6 +26,9 @@ function App() {
       }
     );
     setMenuData(response.data.data.menuItems);
+    if (response.data.data.loggedIn) {
+      setLoggedInState(true);
+    }
   };
 
   useEffect(() => {
@@ -105,7 +106,7 @@ function App() {
           ))}
         </div>
       </div>
-      {isCookiePresent ? (
+      {loggedInState ? (
         <></>
       ) : (
         <div className="mt-2">
