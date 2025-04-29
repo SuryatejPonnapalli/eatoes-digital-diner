@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChevronDown, ChevronUp, Clock, Package, Check, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Clock, Check, X } from "lucide-react";
 import axios from "axios";
 import { OrderHistoryType } from "../types/types";
 import { Link } from "react-router";
@@ -43,13 +43,11 @@ export default function OrderHistory() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "Completed":
+      case "finished":
         return <Check className="h-5 w-5 text-green-500" />;
-      case "Processing":
+      case "processing":
         return <Clock className="h-5 w-5 text-amber-500" />;
-      case "Shipping":
-        return <Package className="h-5 w-5 text-blue-500" />;
-      case "Cancelled":
+      case "cancelled":
         return <X className="h-5 w-5 text-red-500" />;
       default:
         return null;
