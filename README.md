@@ -2,7 +2,7 @@
 
 ## Live App
 
-You can access the working app here: [Live Website](https://eatoes-digital-diner.vercel.app/)
+You can access the working app here: [Live Website](https://eatoes-digital-diner.vercel.app/)(Mobile focused UI)
 
 ## Steps to Run Backend
 
