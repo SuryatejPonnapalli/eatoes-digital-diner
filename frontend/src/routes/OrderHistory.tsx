@@ -28,7 +28,6 @@ export default function OrderHistory() {
         `${import.meta.env.VITE_BACKEND_URL}/order/get-orders`,
         { withCredentials: true }
       );
-      console.log(response);
       setOrderHistory(response.data.data.orders);
     } catch (error) {
       alert("Something went wrong when fetching.");

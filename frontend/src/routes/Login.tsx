@@ -21,7 +21,6 @@ const Login = () => {
         { email: email, password: password },
         { withCredentials: true }
       );
-      console.log("Status", response.status);
       if (response.status === 200) {
         if (location.state === "/checkout") {
           navigate("/checkout");

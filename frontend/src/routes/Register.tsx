@@ -21,10 +21,7 @@ const Register = () => {
         { name: name, email: email, password: password },
         { withCredentials: true }
       );
-      console.log(response);
-      console.log("Status", response.status);
       if (response.status === 200) {
-        console.log("Here");
         navigate("/login");
       }
     } catch (error: any) {

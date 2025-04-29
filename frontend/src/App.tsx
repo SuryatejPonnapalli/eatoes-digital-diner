@@ -71,7 +71,7 @@ function App() {
         </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {menuData.slice(0, 4).map((item: MenuData, index: number) => (
+          {menuData.slice(0, 2).map((item: MenuData, index: number) => (
             <div
               key={index}
               className="flex flex-col rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white"

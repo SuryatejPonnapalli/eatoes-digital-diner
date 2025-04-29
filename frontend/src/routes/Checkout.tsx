@@ -51,7 +51,6 @@ export default function Checkout() {
         }, 3000);
       }
     } catch (error: any) {
-      console.log(error.status);
       if (error?.status === 401) {
         setLoggedIn(false);
       }
