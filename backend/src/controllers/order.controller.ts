@@ -45,4 +45,31 @@ const getOrders = asyncHandler(async (req: Request, res: Response) => {
     .json(new ApiResponse(200, { orders }, "Orders fetched successfully."));
 });
 
-export { createOrder, getOrders };
+const completeOrder = asyncHandler(async (req: Request, res: Response) => {
+  const { orderId, status } = req.body;
+  const user = req.user;
+
+  try {
+    // if (user.role !== "ADMIN") {
+    //   throw new ApiError(403, "Unauthorized.");
+    // }
+    const updatedOrder = await prisma.order.update({
+      where: { id: orderId },
+      data: {
+        status: status,
+      },
+    });
+
+    if (!updatedOrder) {
+      throw new ApiError(400, "No order found.");
+    }
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(200, { updatedOrder }, "Order updated successfully.")
+      );
+  } catch (error: any) {
+    throw new ApiError(error.status, error.message || "Error updating order.");
+  }
+});
+export { createOrder, getOrders, completeOrder };
