@@ -77,10 +77,11 @@ const loginUser = asyncHandler(
       maxAge: number;
     } = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none",
+      secure: false,
+      sameSite: "lax",
       maxAge: 1 * 24 * 60 * 60 * 1000,
     };
+
     res.cookie("accessToken", token, options);
 
     return res

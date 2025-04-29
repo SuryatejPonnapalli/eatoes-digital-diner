@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router";
+import { useNavigate, useLocation, Link } from "react-router";
 import axios from "axios";
 
 const Login = () => {
@@ -7,8 +7,6 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-
-  const from = location.state?.from?.pathname || "/";
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
@@ -25,7 +23,7 @@ const Login = () => {
       );
       console.log("Status", response.status);
       if (response.status === 200) {
-        if (from === "/checkout") {
+        if (location.state === "/checkout") {
           navigate("/checkout");
         } else {
           navigate("/");
@@ -89,6 +87,12 @@ const Login = () => {
             Login
           </button>
         </form>
+        <div className="mt-2">
+          Dont have an account?{" "}
+          <Link to="/register" className="text-blue-400">
+            Signup
+          </Link>{" "}
+        </div>
       </div>
     </div>
   );

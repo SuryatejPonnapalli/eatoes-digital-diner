@@ -6,9 +6,13 @@ import { Button } from "./components/shadcn/Button";
 
 import { useContext } from "react";
 import CartContext from "./context/CartContext";
+import { Link } from "react-router";
 
 function App() {
   const [menuData, setMenuData] = useState<MenuData[]>([]);
+  const isCookiePresent = document.cookie
+    .split(";")
+    .some((cookie) => cookie.trim().startsWith("accessToken="));
 
   const context = useContext(CartContext);
   if (!context) throw new Error("Must be used within CartContextProvider");
@@ -101,6 +105,16 @@ function App() {
           ))}
         </div>
       </div>
+      {isCookiePresent ? (
+        <></>
+      ) : (
+        <div className="mt-2">
+          Would you like to login first?{" "}
+          <Link to="/login" className="text-blue-400">
+            Click here
+          </Link>{" "}
+        </div>
+      )}
     </div>
   );
 }

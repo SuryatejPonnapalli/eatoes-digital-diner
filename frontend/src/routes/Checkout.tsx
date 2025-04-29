@@ -10,6 +10,9 @@ import axios from "axios";
 export default function Checkout() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [orderAcceptResponse, setOrderAcceptResponse] = useState(false);
+  const isCookiePresent = document.cookie
+    .split(";")
+    .some((cookie) => cookie.trim().startsWith("accessToken="));
   const context = useContext(CartContext);
   const navigate = useNavigate();
   if (!context) throw new Error("No context");
@@ -28,6 +31,11 @@ export default function Checkout() {
   };
 
   const handleAcceptOrder = async () => {
+    if (!isCookiePresent) {
+      alert("Login to checkout(Click ok to redirect to login....)");
+      navigate("/login", { state: "/checkout" });
+    }
+
     const trimmedItems = cart.map(({ itemName, cost, quantity }) => ({
       itemName,
       cost,
