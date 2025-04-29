@@ -23,6 +23,8 @@ const registerUser = asyncHandler(
         throw new ApiError(400, "User already exists.");
       }
 
+      console.log("here", user);
+
       user = await prisma.user.create({
         data: {
           name,
