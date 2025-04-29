@@ -7,23 +7,21 @@ import { Input } from "../components/shadcn/Input";
 import { Tabs, TabsList, TabsTrigger } from "../components/shadcn/Tabs";
 import axios from "axios";
 import { MenuData } from "../types/types";
+import useCart from "../hooks/cartHooks";
 
-// Menu data
-const menuItems = [
-  {
-    id: 1,
-    itemName: "Bruschetta",
-    descr: "Toasted bread topped with tomatoes, garlic, and fresh basil",
-    cost: 8.99,
-    category: "starters",
-    image: "/placeholder.svg?height=100&width=200",
-  },
-];
+import { useContext } from "react";
+import CartContext from "../context/CartContext";
 
 export default function Menu() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [menuData, setMenuData] = useState<MenuData[]>([]);
+
+  const context = useContext(CartContext);
+  if (!context) throw new Error("Must be used within CartContextProvider");
+  const { cart } = context;
+
+  const { addItem, increaseQuantity, decreaseQuantity } = useCart();
 
   const getMenuItems = async () => {
     const res = await axios.get(
@@ -37,7 +35,9 @@ export default function Menu() {
     getMenuItems();
   }, []);
 
-  console.log(menuData);
+  const checkIfOrdered = (item: MenuData) =>
+    cart.find((p) => p.itemName === item.itemName);
+
   // Filter menu items based on search query and active category
   const filteredItems = menuData.filter((item) => {
     const matchesSearch =
@@ -99,12 +99,27 @@ export default function Menu() {
                 <p className="text-muted-foreground text-sm mb-4">
                   {item.desc}
                 </p>
-                <Button
-                  size="sm"
-                  className="w-full bg-[#A8E6CF] hover:bg-[#97d1bc]"
-                >
-                  Add to Cart
-                </Button>
+                {(() => {
+                  const existingItem = checkIfOrdered(item);
+
+                  return existingItem ? (
+                    <div className="flex flex-row bg-[#A8E6CF] hover:bg-[#97d1bc] text-sm font-medium px-4 py-2 rounded-xl transition-colors duration-200 w-full justify-between items-center">
+                      <div onClick={() => decreaseQuantity(item)}>-</div>
+                      <div>{existingItem.quantity}</div>
+                      <div onClick={() => increaseQuantity(item)}>+</div>
+                    </div>
+                  ) : (
+                    <Button
+                      size="sm"
+                      className="w-full bg-[#A8E6CF] hover:bg-[#97d1bc]"
+                      onClick={() => {
+                        addItem(item);
+                      }}
+                    >
+                      Add to Cart
+                    </Button>
+                  );
+                })()}
               </CardContent>
             </Card>
           ))

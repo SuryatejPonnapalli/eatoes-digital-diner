@@ -1,9 +1,20 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { MenuData } from "./types/types";
+import useCart from "./hooks/cartHooks";
+import { Button } from "./components/shadcn/Button";
+
+import { useContext } from "react";
+import CartContext from "./context/CartContext";
 
 function App() {
   const [menuData, setMenuData] = useState<MenuData[]>([]);
+
+  const context = useContext(CartContext);
+  if (!context) throw new Error("Must be used within CartContextProvider");
+  const { cart } = context;
+
+  const { addItem, increaseQuantity, decreaseQuantity } = useCart();
 
   const fetchMenuData = async () => {
     const response = await axios.get(
@@ -19,7 +30,8 @@ function App() {
     fetchMenuData();
   }, []);
 
-  console.log(menuData);
+  const checkIfOrdered = (item: MenuData) =>
+    cart.find((p) => p.itemName === item.itemName);
 
   return (
     <div className="container pt-20 pb-20 mx-auto py-12 px-4 md:px-6 lg:px-8 max-w-7xl">
@@ -63,9 +75,27 @@ function App() {
                 <p className="text-sm text-gray-600 mb-4 flex-grow">
                   {item.desc}
                 </p>
-                <button className="bg-[#A8E6CF] hover:bg-[#97d1bc] text-sm font-medium px-4 py-2 rounded-xl transition-colors duration-200 w-full">
-                  Order now
-                </button>
+                {(() => {
+                  const existingItem = checkIfOrdered(item);
+
+                  return existingItem ? (
+                    <div className="flex flex-row bg-[#A8E6CF] hover:bg-[#97d1bc] text-sm font-medium px-4 py-2 rounded-xl transition-colors duration-200 w-full justify-between items-center">
+                      <div onClick={() => decreaseQuantity(item)}>-</div>
+                      <div>{existingItem.quantity}</div>
+                      <div onClick={() => increaseQuantity(item)}>+</div>
+                    </div>
+                  ) : (
+                    <Button
+                      size="sm"
+                      className="w-full bg-[#A8E6CF] hover:bg-[#97d1bc]"
+                      onClick={() => {
+                        addItem(item);
+                      }}
+                    >
+                      Add to Cart
+                    </Button>
+                  );
+                })()}
               </div>
             </div>
           ))}
