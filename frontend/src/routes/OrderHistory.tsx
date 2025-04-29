@@ -12,6 +12,7 @@ import { format } from "date-fns";
 export default function OrderHistory() {
   const [expandedOrders, setExpandedOrders] = useState<string[]>([]);
   const [orderHistory, setOrderHistory] = useState<OrderHistoryType[]>([]);
+  const [loadingState, setLoadingState] = useState(true);
 
   const toggleOrderExpand = (orderId: string) => {
     setExpandedOrders((prev) =>
@@ -22,12 +23,18 @@ export default function OrderHistory() {
   };
 
   const getOrderHistory = async () => {
-    const response = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/order/get-orders`,
-      { withCredentials: true }
-    );
-    console.log(response);
-    setOrderHistory(response.data.data.orders);
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/order/get-orders`,
+        { withCredentials: true }
+      );
+      console.log(response);
+      setOrderHistory(response.data.data.orders);
+    } catch (error) {
+      alert("Something went wrong when fetching.");
+    } finally {
+      setLoadingState(false);
+    }
   };
 
   useEffect(() => {
@@ -48,6 +55,15 @@ export default function OrderHistory() {
         return null;
     }
   };
+
+  if (loadingState) {
+    return (
+      <div className="mt-20 px-4">
+        Fetching details, please wait...(Might take a while due to render
+        backend)
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-12 px-4 md:px-6 lg:px-8 max-w-4xl pt-20 pb-20">

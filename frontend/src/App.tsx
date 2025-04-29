@@ -11,6 +11,7 @@ import { Link } from "react-router";
 function App() {
   const [menuData, setMenuData] = useState<MenuData[]>([]);
   const [loggedInState, setLoggedInState] = useState(false);
+  const [loadingState, setLoadingState] = useState(true);
 
   const context = useContext(CartContext);
   if (!context) throw new Error("Must be used within CartContextProvider");
@@ -19,15 +20,21 @@ function App() {
   const { addItem, increaseQuantity, decreaseQuantity } = useCart();
 
   const fetchMenuData = async () => {
-    const response = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/menu/get-menu-items`,
-      {
-        withCredentials: true,
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/menu/get-menu-items`,
+        {
+          withCredentials: true,
+        }
+      );
+      setMenuData(response.data.data.menuItems);
+      if (response.data.data.loggedIn) {
+        setLoggedInState(true);
       }
-    );
-    setMenuData(response.data.data.menuItems);
-    if (response.data.data.loggedIn) {
-      setLoggedInState(true);
+    } catch (error) {
+      alert("Something went wrong");
+    } finally {
+      setLoadingState(false);
     }
   };
 
@@ -38,6 +45,14 @@ function App() {
   const checkIfOrdered = (item: MenuData) =>
     cart.find((p) => p.itemName === item.itemName);
 
+  if (loadingState) {
+    return (
+      <div className="mt-20 px-4">
+        Fetching details, please wait...(Might take a while due to render
+        backend)
+      </div>
+    );
+  }
   return (
     <div className="container pt-20 pb-20 mx-auto py-12 px-4 md:px-6 lg:px-8 max-w-7xl">
       <div className="mb-12">

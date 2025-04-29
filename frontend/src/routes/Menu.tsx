@@ -16,6 +16,7 @@ export default function Menu() {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("all");
   const [menuData, setMenuData] = useState<MenuData[]>([]);
+  const [loadingState, setLoadingState] = useState(true);
 
   const context = useContext(CartContext);
   if (!context) throw new Error("Must be used within CartContextProvider");
@@ -24,11 +25,17 @@ export default function Menu() {
   const { addItem, increaseQuantity, decreaseQuantity } = useCart();
 
   const getMenuItems = async () => {
-    const res = await axios.get(
-      `${import.meta.env.VITE_BACKEND_URL}/menu/get-menu-items`,
-      { withCredentials: true }
-    );
-    setMenuData(res.data.data.menuItems);
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_BACKEND_URL}/menu/get-menu-items`,
+        { withCredentials: true }
+      );
+      setMenuData(res.data.data.menuItems);
+    } catch (error) {
+      alert("Problem fetching details.");
+    } finally {
+      setLoadingState(false);
+    }
   };
 
   useEffect(() => {
@@ -48,6 +55,15 @@ export default function Menu() {
 
     return matchesSearch && matchesCategory;
   });
+
+  if (loadingState) {
+    return (
+      <div className="mt-20 px-4">
+        Fetching details, please wait...(Might take a while due to render
+        backend)
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-8 px-4 pt-20 pb-20">

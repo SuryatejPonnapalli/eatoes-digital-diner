@@ -6,10 +6,12 @@ import { CartType } from "../types/types";
 import { Trash, ChevronRight } from "lucide-react";
 import { Link } from "react-router";
 import axios from "axios";
+import ErrorComponent from "../components/ErrorComponent";
 
 export default function Checkout() {
   const [totalPrice, setTotalPrice] = useState(0);
   const [orderAcceptResponse, setOrderAcceptResponse] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(true);
 
   const context = useContext(CartContext);
   const navigate = useNavigate();
@@ -49,9 +51,9 @@ export default function Checkout() {
         }, 3000);
       }
     } catch (error: any) {
+      console.log(error.status);
       if (error?.status === 401) {
-        alert("Login to checkout(Click ok to redirect to login....)");
-        navigate("/login", { state: "/checkout" });
+        setLoggedIn(false);
       }
     }
   };
@@ -59,6 +61,15 @@ export default function Checkout() {
   useEffect(() => {
     findTotalCost();
   }, [cart]);
+
+  if (!loggedIn) {
+    return (
+      <ErrorComponent
+        message="Login to checkout(Your cart will be saved)."
+        redirectUrl="/login"
+      />
+    );
+  }
 
   return orderAcceptResponse ? (
     <div className="max-w-xl mx-auto mt-20 bg-white shadow-xl rounded-2xl p-6">
