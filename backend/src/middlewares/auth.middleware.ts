@@ -9,6 +9,7 @@ export const authMiddleware = async (
   next: NextFunction
 ) => {
   const token = req.headers.authorization || req.cookies?.accessToken;
+  console.log("here", token);
 
   if (!token) {
     throw new ApiError(401, "Unauthorized, no token.");

@@ -45,6 +45,8 @@ model Order {
   items Json
   totalPrice Int
   status Status @default(processing)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("orders")
 }

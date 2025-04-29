@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import CartContext from "../context/CartContext";
-import { MenuData } from "../types/types";
+import { CartType, MenuData } from "../types/types";
 
 const useCart = () => {
   const context = useContext(CartContext);
@@ -11,7 +11,7 @@ const useCart = () => {
 
   const { cart, setCart } = context;
 
-  const addItem = (item: MenuData) => {
+  const addItem = (item: MenuData | CartType) => {
     setCart((prev) => {
       const existingItem = prev.find((p) => p.itemName == item.itemName);
       if (existingItem) {
@@ -24,7 +24,7 @@ const useCart = () => {
     });
   };
 
-  const increaseQuantity = (item: MenuData) => {
+  const increaseQuantity = (item: MenuData | CartType) => {
     setCart((prev) =>
       prev.map((p) =>
         p.itemName === item.itemName ? { ...p, quantity: p.quantity + 1 } : p
@@ -32,7 +32,7 @@ const useCart = () => {
     );
   };
 
-  const decreaseQuantity = (item: MenuData) => {
+  const decreaseQuantity = (item: MenuData | CartType) => {
     setCart((prev) =>
       prev
         .map((p) =>
@@ -42,7 +42,7 @@ const useCart = () => {
     );
   };
 
-  const removeItem = (item: MenuData) => {
+  const removeItem = (item: MenuData | CartType) => {
     setCart((prev) => prev.filter((p) => p.itemName !== item.itemName));
   };
 

@@ -10,15 +10,15 @@ const createOrder = asyncHandler(
     try {
       OrderSchema.parse(req.body);
       const user = req.user;
-      const { items, totalPrice } = req.body;
-      if (!items || !totalPrice) {
+      const { cart, totalPrice } = req.body;
+      if (!cart || !totalPrice) {
         throw new ApiError(400, "Data to create order not provided.");
       }
 
       const order = await prisma.order.create({
         data: {
           userId: user.id,
-          items: items,
+          items: cart,
           totalPrice: totalPrice,
         },
       });

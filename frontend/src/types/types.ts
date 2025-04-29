@@ -12,3 +12,19 @@ export interface CartType {
   cost: number;
   quantity: number;
 }
+
+interface OrderType {
+  itemName: string;
+  quantity: number;
+  cost: number;
+}
+
+export interface OrderHistoryType {
+  id: any;
+  items: OrderType[];
+  totalPrice: number;
+  userId: any;
+  status: string;
+  createdAt: any;
+  updatedAt: any;
+}

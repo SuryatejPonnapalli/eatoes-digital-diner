@@ -6,6 +6,7 @@ import App from "./App.tsx";
 import Menu from "./routes/Menu.tsx";
 import OrderHistory from "./routes/OrderHistory.tsx";
 import CartContextProvider from "./context/CartContextProvider.tsx";
+import Checkout from "./routes/Checkout.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <CartContextProvider>
@@ -15,6 +16,7 @@ createRoot(document.getElementById("root")!).render(
           <Route index element={<App />} />
           <Route path="menu" element={<Menu />} />
           <Route path="history" element={<OrderHistory />} />
+          <Route path="checkout" element={<Checkout />} />
         </Route>
         {/* <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} /> */}

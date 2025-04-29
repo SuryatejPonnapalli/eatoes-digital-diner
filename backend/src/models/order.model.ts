@@ -1,10 +1,11 @@
 import { z } from "zod";
 
 export const OrderSchema = z.object({
-  items: z.array(
+  cart: z.array(
     z.object({
       itemName: z.string(),
       quantity: z.number(),
+      cost: z.number(),
     })
   ),
   totalPrice: z.number(),
