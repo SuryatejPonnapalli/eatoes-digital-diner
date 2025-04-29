@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 
 import { Button } from "../components/shadcn/Button";
-import { Card, CardContent } from "../components/shadcn/Card";
 import { Input } from "../components/shadcn/Input";
 import { Tabs, TabsList, TabsTrigger } from "../components/shadcn/Tabs";
 import axios from "axios";
@@ -86,10 +85,10 @@ export default function Menu() {
         <Tabs defaultValue="all" onValueChange={setActiveCategory}>
           <TabsList className="w-full justify-start overflow-x-auto">
             <TabsTrigger value="all">All</TabsTrigger>
-            <TabsTrigger value="starters">Starters</TabsTrigger>
+            <TabsTrigger value="starter">Starters</TabsTrigger>
             <TabsTrigger value="main-course">Main Course</TabsTrigger>
-            <TabsTrigger value="desserts">Desserts</TabsTrigger>
-            <TabsTrigger value="drinks">Drinks</TabsTrigger>
+            <TabsTrigger value="dessert">Desserts</TabsTrigger>
+            <TabsTrigger value="drink">Drinks</TabsTrigger>
           </TabsList>
         </Tabs>
       </div>
@@ -97,22 +96,28 @@ export default function Menu() {
       {/* Menu Items Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredItems.length > 0 ? (
-          filteredItems.map((item) => (
-            <Card key={item.id} className="overflow-hidden">
-              <div className="relative h-48 w-full">
+          filteredItems.map((item, index) => (
+            <div
+              key={index}
+              className="flex flex-col rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 bg-white"
+            >
+              <div className="relative h-48 overflow-hidden">
                 <img
                   src={item.image || "/placeholder.svg"}
-                  alt={item.itemName}
+                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                  alt={`${item.itemName} image`}
                 />
               </div>
-              <CardContent className="p-4">
-                <div className="flex justify-between items-start mb-2 mt-20">
-                  <h3 className="font-semibold text-lg">{item.itemName}</h3>
-                  <span className="font-bold text-primary">
-                    ₹{item.cost.toFixed(2)}
+              <div className="flex flex-col p-4 flex-grow">
+                <div className="flex justify-between items-center mb-2">
+                  <h3 className="font-medium text-base md:text-lg">
+                    {item.itemName}
+                  </h3>
+                  <span className="font-semibold text-base md:text-lg">
+                    ₹{item.cost}
                   </span>
                 </div>
-                <p className="text-muted-foreground text-sm mb-4">
+                <p className="text-sm text-gray-600 mb-4 flex-grow">
                   {item.desc}
                 </p>
                 {(() => {
@@ -136,8 +141,8 @@ export default function Menu() {
                     </Button>
                   );
                 })()}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           ))
         ) : (
           <div className="col-span-full text-center py-12 pt-20 pb-20">
