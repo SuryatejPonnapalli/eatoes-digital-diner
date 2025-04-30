@@ -6,6 +6,7 @@ import axios from "axios";
 import { OrderHistoryType } from "../types/types";
 import { Link } from "react-router";
 import { format } from "date-fns";
+import ErrorComponent from "../components/ErrorComponent";
 
 // Sample order data
 
@@ -13,6 +14,7 @@ export default function OrderHistory() {
   const [expandedOrders, setExpandedOrders] = useState<string[]>([]);
   const [orderHistory, setOrderHistory] = useState<OrderHistoryType[]>([]);
   const [loadingState, setLoadingState] = useState(true);
+  const [errorState, setErrorState] = useState(false);
 
   const toggleOrderExpand = (orderId: string) => {
     setExpandedOrders((prev) =>
@@ -30,7 +32,7 @@ export default function OrderHistory() {
       );
       setOrderHistory(response.data.data.orders);
     } catch (error) {
-      alert("Something went wrong when fetching.");
+      setErrorState(true);
     } finally {
       setLoadingState(false);
     }
@@ -60,6 +62,10 @@ export default function OrderHistory() {
         backend)
       </div>
     );
+  }
+
+  if (errorState) {
+    <ErrorComponent redirectUrl="/login" message="Login to check history." />;
   }
 
   return (
