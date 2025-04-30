@@ -55,6 +55,12 @@ export default function OrderHistory() {
     }
   };
 
+  if (errorState) {
+    return (
+      <ErrorComponent redirectUrl="/login" message="Login to check history." />
+    );
+  }
+
   if (loadingState) {
     return (
       <div className="mt-20 px-4">
@@ -62,10 +68,6 @@ export default function OrderHistory() {
         backend)
       </div>
     );
-  }
-
-  if (errorState) {
-    <ErrorComponent redirectUrl="/login" message="Login to check history." />;
   }
 
   return (
